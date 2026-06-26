@@ -25,18 +25,18 @@ campaign = Campaign.create!(
       כדי לזכור דרך החיים, האור והאהבה.
     </p>
   HTML
-  cover_image_url: "campaign_cover.png",
+  cover_image_url: "campaign_cover.jpg",
   goal_amount: 5_000_000
 )
 
 [
-  { amount: 360, donor_name: "דנה כהן", display_preference: "full_name", recurring: false },
-  { amount: 180, donor_name: "יוסי לוי", display_preference: "first_name", recurring: true },
-  { amount: 1800, donor_name: "משפחת אברהמי", display_preference: "full_name", recurring: false },
-  { amount: 260, donor_name: "רונית שמעוני", display_preference: "anonymous", recurring: false },
-  { amount: 5000, donor_name: "אבי ומירב גולן", display_preference: "full_name", recurring: false },
-  { amount: 360, donor_name: "תמר ברק", display_preference: "first_name", recurring: true },
-  { amount: 180, donor_name: "עמית רוזנברג", display_preference: "full_name", recurring: false }
+  { amount: 360_000, donor_name: "דנה כהן", display_preference: "full_name", recurring: false },
+  { amount: 180_000, donor_name: "יוסי לוי", display_preference: "first_name", recurring: true },
+  { amount: 250_000, donor_name: "משפחת אברהמי", display_preference: "full_name", recurring: false },
+  { amount: 50_000, donor_name: "רונית שמעוני", display_preference: "anonymous", recurring: false },
+  { amount: 100_000, donor_name: "אבי ומירב גולן", display_preference: "full_name", recurring: false },
+  { amount: 90_000, donor_name: "תמר ברק", display_preference: "first_name", recurring: true },
+  { amount: 49_491, donor_name: "עמית רוזנברג", display_preference: "full_name", recurring: false }
 ].each do |data|
   campaign.donations.create!(data)
 end
