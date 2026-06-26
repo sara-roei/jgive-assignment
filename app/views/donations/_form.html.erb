@@ -1,2 +1,115 @@
-<%# Donation form - to be implemented in commit 5 %>
-<p>טופס תרומה</p>
+<%= form_with model: [campaign, donation], class: "donation-form" do |f| %>
+
+  <h2>פרטי התרומה שלי</h2>
+
+  <% if donation.errors.any? %>
+    <div class="form-errors">
+      <% donation.errors.full_messages.each do |message| %>
+        <p><%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# One-time / Recurring %>
+  <div class="form-group">
+    <div class="radio-group">
+      <%= f.radio_button :recurring, false, checked: !donation.recurring, id: "recurring_false" %>
+      <%= f.label :recurring, "תרומה חד-פעמית", for: "recurring_false" %>
+
+      <%= f.radio_button :recurring, true, checked: donation.recurring, id: "recurring_true" %>
+      <%= f.label :recurring, "הוראת קבע", for: "recurring_true" %>
+    </div>
+  </div>
+
+  <%# Preset amounts %>
+  <div class="form-group">
+    <div class="preset-amounts">
+      <% [
+        { value: 180, label: "נטיעת עץ" },
+        { value: 260, label: "נטיעת 2 עצים" },
+        { value: 360, label: "נטיעת 3 עצים" },
+        { value: 1800, label: "בונים מרחב לילדים" },
+        { value: 5000, label: "בוני הגן הכתום" }
+      ].each do |option| %>
+        <button type="button" class="preset-amount" data-amount="<%= option[:value] %>">
+          <span class="preset-value"><%= option[:value] %> &#8362;</span>
+          <span class="preset-label"><%= option[:label] %></span>
+        </button>
+      <% end %>
+      <button type="button" class="preset-amount" data-amount="custom">
+        <span class="preset-label">סכום אחר</span>
+      </button>
+    </div>
+
+    <div class="custom-amount-input" style="display: none;">
+      <%= f.number_field :amount, min: 1, step: 1, placeholder: "הזינו סכום", class: "amount-input" %>
+    </div>
+    <%= f.hidden_field :amount, id: "donation_amount_hidden" %>
+  </div>
+
+  <%# Dedication %>
+  <div class="form-group">
+    <label class="checkbox-label">
+      <input type="checkbox" id="dedication-toggle">
+      הקדשת תרומה
+    </label>
+    <div class="dedication-field" style="display: none;">
+      <%= f.text_area :dedication, placeholder: "הקדשה", rows: 3 %>
+    </div>
+  </div>
+
+  <%# Display Preference %>
+  <div class="form-group">
+    <label>אני רוצה שבעמוד הפרויקט יופיע:</label>
+    <%= f.select :display_preference,
+      [
+        ["השם שלי וסכום התרומה", "full_name"],
+        ["שם פרטי בלבד", "first_name"],
+        ["תרומה אנונימית", "anonymous"]
+      ],
+      {}, class: "display-preference-select" %>
+  </div>
+
+  <%# Donor Name %>
+  <div class="form-group">
+    <%= f.label :donor_name, "שם התורם/ת" %>
+    <%= f.text_field :donor_name, placeholder: "שם מלא", class: "text-input" %>
+  </div>
+
+  <%# Submit %>
+  <div class="form-group">
+    <%= f.submit "תרמו עכשיו", class: "submit-button" %>
+  </div>
+
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var hiddenAmount = document.getElementById('donation_amount_hidden');
+    var customInput = document.querySelector('.custom-amount-input');
+    var amountField = document.querySelector('.amount-input');
+
+    document.querySelectorAll('.preset-amount').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.preset-amount').forEach(function(b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+
+        if (btn.dataset.amount === 'custom') {
+          customInput.style.display = 'block';
+          amountField.focus();
+          hiddenAmount.disabled = true;
+          amountField.name = 'donation[amount]';
+        } else {
+          customInput.style.display = 'none';
+          hiddenAmount.disabled = false;
+          hiddenAmount.value = btn.dataset.amount;
+          amountField.name = '';
+        }
+      });
+    });
+
+    document.getElementById('dedication-toggle').addEventListener('change', function() {
+      document.querySelector('.dedication-field').style.display = this.checked ? 'block' : 'none';
+    });
+  });
+</script>
