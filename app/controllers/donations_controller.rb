@@ -4,7 +4,7 @@ class DonationsController < ApplicationController
     @donation = @campaign.donations.new(donation_params)
 
     if @donation.save
-      redirect_to campaign_path(@campaign), notice: "תודה על תרומתך!"
+      redirect_to campaign_path(@campaign, anchor: "donation-form"), notice: "תודה על תרומתך!"
     else
       render "campaigns/show", status: :unprocessable_entity
     end

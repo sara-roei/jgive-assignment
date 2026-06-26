@@ -20,7 +20,7 @@
     </div>
 
     <div class="progress-bar-container">
-      <div class="progress-bar" style="width: <%= @campaign.progress_percentage %>%">
+      <div class="progress-bar" style="width: <%= [@campaign.progress_percentage, 100].min %>%">
         <span class="progress-heart">&hearts;</span>
       </div>
     </div>
@@ -64,6 +64,9 @@
   </section>
 
   <section class="donation-form-section" id="donation-form">
+    <% if notice %>
+      <div class="flash-notice"><%= notice %></div>
+    <% end %>
     <%= render "donations/form", campaign: @campaign, donation: @donation %>
   </section>
 
