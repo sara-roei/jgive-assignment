@@ -2,7 +2,7 @@
 
   <%# Section 1: Hero Banner %>
   <section class="hero-banner">
-    <%= image_tag @campaign.cover_image_url, alt: @campaign.title, class: "hero-image" %>
+    <img src="/<%= @campaign.cover_image_url %>" alt="<%= @campaign.title %>" class="hero-image">
   </section>
 
   <%# Section 2: Progress %>
