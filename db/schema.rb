@@ -26,7 +26,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_26_060223) do
     t.datetime "created_at", null: false
     t.text "dedication"
     t.string "display_preference", default: "full_name", null: false
-    t.string "donor_name"
+    t.string "donor_name", null: false
     t.boolean "recurring", default: false, null: false
     t.string "status", default: "pending", null: false
     t.datetime "updated_at", null: false

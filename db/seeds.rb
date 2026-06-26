@@ -1,5 +1,8 @@
-campaign = Campaign.find_or_create_by!(title: "הגן הכתום") do |c|
-  c.description = <<~HTML
+Campaign.destroy_all
+
+campaign = Campaign.create!(
+  title: "הגן הכתום",
+  description: <<~HTML,
     <h2>הצטרפו עכשיו והיו ממקימי ׳הגן הכתום׳</h2>
     <h3>לזכר שירי, אריאל וכפיר ביבס, ולזכר כל ילדי ה-7 באוקטובר.</h3>
     <p>
@@ -22,11 +25,11 @@ campaign = Campaign.find_or_create_by!(title: "הגן הכתום") do |c|
       כדי לזכור דרך החיים, האור והאהבה.
     </p>
   HTML
-  c.cover_image_url = "campaign_cover.jpg"
-  c.goal_amount = 5_000_000
-end
+  cover_image_url: "campaign_cover.jpg",
+  goal_amount: 5_000_000
+)
 
-donations_data = [
+[
   { amount: 360, donor_name: "דנה כהן", display_preference: "full_name", recurring: false },
   { amount: 180, donor_name: "יוסי לוי", display_preference: "first_name", recurring: true },
   { amount: 1800, donor_name: "משפחת אברהמי", display_preference: "full_name", recurring: false },
@@ -34,12 +37,6 @@ donations_data = [
   { amount: 5000, donor_name: "אבי ומירב גולן", display_preference: "full_name", recurring: false },
   { amount: 360, donor_name: "תמר ברק", display_preference: "first_name", recurring: true },
   { amount: 180, donor_name: "עמית רוזנברג", display_preference: "full_name", recurring: false }
-]
-
-donations_data.each do |data|
-  campaign.donations.find_or_create_by!(donor_name: data[:donor_name]) do |d|
-    d.amount = data[:amount]
-    d.display_preference = data[:display_preference]
-    d.recurring = data[:recurring]
-  end
+].each do |data|
+  campaign.donations.create!(data)
 end
