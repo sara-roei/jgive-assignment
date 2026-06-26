@@ -4,7 +4,7 @@ class CreateDonations < ActiveRecord::Migration[8.1]
       t.references :campaign, null: false, foreign_key: true
       t.decimal :amount, precision: 10, scale: 2, null: false
       t.string :donor_name, null: false
-      t.string :display_preference, default: "full_name", null: false
+      t.string :display_preference, default: "show_name_and_amount", null: false
       t.boolean :recurring, default: false, null: false
       t.text :dedication
       t.string :status, default: "pending", null: false

@@ -41,10 +41,7 @@
       </button>
     </div>
 
-    <div class="custom-amount-input" style="display: none;">
-      <%= f.number_field :amount, min: 1, step: 1, placeholder: "הזינו סכום", class: "amount-input" %>
-    </div>
-    <%= f.hidden_field :amount, id: "donation_amount_hidden" %>
+    <%= f.number_field :amount, min: 1, step: 1, placeholder: "הזינו סכום", class: "amount-input", id: "donation_amount" %>
   </div>
 
   <%# Dedication %>
@@ -63,9 +60,9 @@
     <label>אני רוצה שבעמוד הפרויקט יופיע:</label>
     <%= f.select :display_preference,
       [
-        ["השם שלי וסכום התרומה", "full_name"],
-        ["שם פרטי בלבד", "first_name"],
-        ["תרומה אנונימית", "anonymous"]
+        ["השם שלי וסכום התרומה", "show_name_and_amount"],
+        ["השם שלי בלבד", "show_name_only"],
+        ["סכום התרומה בלבד", "show_amount_only"]
       ],
       {}, class: "display-preference-select" %>
   </div>
@@ -85,9 +82,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    var hiddenAmount = document.getElementById('donation_amount_hidden');
-    var customInput = document.querySelector('.custom-amount-input');
-    var amountField = document.querySelector('.amount-input');
+    var amountField = document.getElementById('donation_amount');
 
     document.querySelectorAll('.preset-amount').forEach(function(btn) {
       btn.addEventListener('click', function() {
@@ -95,15 +90,10 @@
         btn.classList.add('selected');
 
         if (btn.dataset.amount === 'custom') {
-          customInput.style.display = 'block';
+          amountField.value = '';
           amountField.focus();
-          hiddenAmount.disabled = true;
-          amountField.name = 'donation[amount]';
         } else {
-          customInput.style.display = 'none';
-          hiddenAmount.disabled = false;
-          hiddenAmount.value = btn.dataset.amount;
-          amountField.name = '';
+          amountField.value = btn.dataset.amount;
         }
       });
     });

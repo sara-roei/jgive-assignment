@@ -1,10 +1,36 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+.progress-bar-container {
+  background: #e0e0e0;
+  border-radius: 20px;
+  height: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  background: #4caf50;
+  height: 100%;
+  border-radius: 20px;
+  position: relative;
+  min-width: 30px;
+  transition: width 0.3s;
+}
+
+.progress-heart {
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: #f79e1b;
+}

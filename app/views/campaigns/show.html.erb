@@ -1,11 +1,13 @@
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+
 <div class="campaign-page" dir="rtl">
 
-  <%# Section 1: Hero Banner %>
   <section class="hero-banner">
     <img src="/<%= @campaign.cover_image_url %>" alt="<%= @campaign.title %>" class="hero-image">
   </section>
 
-  <%# Section 2: Progress %>
   <section class="progress-section">
     <div class="progress-stats">
       <div class="amount-raised">
@@ -33,38 +35,34 @@
     </div>
   </section>
 
-  <%# Section 3: Actions %>
   <section class="actions-section">
     <a href="#donation-form" class="donate-button">לתרומה</a>
   </section>
 
-  <%# Section 4: Campaign Title %>
   <section class="campaign-header">
     <h1 class="campaign-title"><%= @campaign.title %></h1>
   </section>
 
-  <%# Section 5: Tabs %>
   <section class="tabs-section">
-    <div class="tab-bar">
+    <nav class="tab-bar">
       <button class="tab active" data-tab="story">על הפרויקט</button>
-      <button class="tab" data-tab="donors">תרומות אחרונות</button>
-    </div>
+      <button class="tab" data-tab="donations">תרומות אחרונות</button>
+      <button class="tab" data-tab="about">על העמותה</button>
+    </nav>
 
-    <div class="tab-content active" id="tab-story">
+    <div class="tab-panel active" id="tab-story">
       <%= raw @campaign.description %>
     </div>
 
-    <div class="tab-content" id="tab-donors">
-      <% @campaign.donations.order(created_at: :desc).each do |donation| %>
-        <div class="donor-item">
-          <span class="donor-name"><%= donation.display_name || "תורם אנונימי" %></span>
-          <span class="donor-amount"><%= number_with_delimiter(donation.amount.to_i) %> &#8362;</span>
-        </div>
-      <% end %>
+    <div class="tab-panel" id="tab-donations">
+      <p>תרומות אחרונות יופיעו כאן</p>
+    </div>
+
+    <div class="tab-panel" id="tab-about">
+      <p>מידע על העמותה יופיע כאן</p>
     </div>
   </section>
 
-  <%# Section 6: Donation Form (inline, scrolled to via anchor) %>
   <section class="donation-form-section" id="donation-form">
     <%= render "donations/form", campaign: @campaign, donation: @donation %>
   </section>
@@ -75,7 +73,7 @@
   document.querySelectorAll('.tab').forEach(function(tab) {
     tab.addEventListener('click', function() {
       document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
 
       tab.classList.add('active');
       document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
