@@ -1,1 +1,84 @@
-<h1><%= @campaign.title %></h1>
+<div class="campaign-page" dir="rtl">
+
+  <%# Section 1: Hero Banner %>
+  <section class="hero-banner">
+    <%= image_tag @campaign.cover_image_url, alt: @campaign.title, class: "hero-image" %>
+  </section>
+
+  <%# Section 2: Progress %>
+  <section class="progress-section">
+    <div class="progress-stats">
+      <div class="amount-raised">
+        <span class="amount"><%= number_with_delimiter(@campaign.amount_raised.to_i) %></span>
+        <span class="currency">&#8362;</span>
+      </div>
+      <div class="progress-percentage">
+        <%= @campaign.progress_percentage %>% גויסו
+      </div>
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" style="width: <%= @campaign.progress_percentage %>%">
+        <span class="progress-heart">&hearts;</span>
+      </div>
+    </div>
+
+    <div class="progress-details">
+      <div class="goal-amount">
+        יעד: <%= number_with_delimiter(@campaign.goal_amount.to_i) %> &#8362;
+      </div>
+      <div class="donors-count">
+        מספר תורמים: <%= number_with_delimiter(@campaign.donors_count) %>
+      </div>
+    </div>
+  </section>
+
+  <%# Section 3: Actions %>
+  <section class="actions-section">
+    <a href="#donation-form" class="donate-button">לתרומה</a>
+  </section>
+
+  <%# Section 4: Campaign Title %>
+  <section class="campaign-header">
+    <h1 class="campaign-title"><%= @campaign.title %></h1>
+  </section>
+
+  <%# Section 5: Tabs %>
+  <section class="tabs-section">
+    <div class="tab-bar">
+      <button class="tab active" data-tab="story">על הפרויקט</button>
+      <button class="tab" data-tab="donors">תרומות אחרונות</button>
+    </div>
+
+    <div class="tab-content active" id="tab-story">
+      <%= raw @campaign.description %>
+    </div>
+
+    <div class="tab-content" id="tab-donors">
+      <% @campaign.donations.order(created_at: :desc).each do |donation| %>
+        <div class="donor-item">
+          <span class="donor-name"><%= donation.display_name || "תורם אנונימי" %></span>
+          <span class="donor-amount"><%= number_with_delimiter(donation.amount.to_i) %> &#8362;</span>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <%# Section 6: Donation Form (inline, scrolled to via anchor) %>
+  <section class="donation-form-section" id="donation-form">
+    <%= render "donations/form", campaign: @campaign, donation: @donation %>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+</script>

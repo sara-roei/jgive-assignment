@@ -25,7 +25,7 @@ campaign = Campaign.create!(
       כדי לזכור דרך החיים, האור והאהבה.
     </p>
   HTML
-  cover_image_url: "campaign_cover.jpg",
+  cover_image_url: "campaign_cover.png",
   goal_amount: 5_000_000
 )
 
