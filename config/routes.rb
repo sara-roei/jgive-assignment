@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   resources :campaigns, only: [:show] do
     resources :donations, only: [:create]
   end
+
+  root to: redirect("/campaigns/1")
 end
