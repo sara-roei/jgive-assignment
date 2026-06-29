@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -87,15 +91,20 @@ body {
   border-radius: 20px;
   position: relative;
   min-width: 30px;
-  transition: width 0.5s ease;
+  animation: grow-bar 2.5s ease-out forwards;
+}
+
+@keyframes grow-bar {
+  from { max-width: 0; }
+  to   { max-width: 100%; }
 }
 
 .progress-heart {
   position: absolute;
-  left: -16px;
+  left: -26px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 28px;
+  font-size: 52px;
   color: #f79e1b;
 }
 

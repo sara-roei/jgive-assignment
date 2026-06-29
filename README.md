@@ -1,24 +1,46 @@
-# README
+# Jgive Campaign Donation Page
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails application reproducing the [Jgive campaign donation page](https://www.jgive.com/new/he/ils/donation-targets/159183) — the donor-facing experience up to (but not including) payment.
 
-Things you may want to cover:
+Built with Rails 8.1, SQLite, and ERB views.
 
-* Ruby version
+## Running Locally
 
-* System dependencies
+Prerequisites: Ruby 3.2.2, Bundler, SQLite3.
 
-* Configuration
+```bash
+git clone https://github.com/sara-roei/jgive-assignment.git
+cd jgive-assignment
+bundle install
+bin/rails db:migrate:reset db:seed
+bin/rails server
+```
 
-* Database creation
+Visit [http://localhost:3000/campaigns/1](http://localhost:3000/campaigns/1).
 
-* Database initialization
+## Key Decisions and Trade-offs
 
-* How to run the test suite
+- **ERB views over React** — avoids a JS build pipeline and API layer within the time constraint. ERB + vanilla JS covers all interactivity needs for this scope.
+- **SQLite over PostgreSQL** — zero setup, sufficient for a demo app. Trade-off: ephemeral storage on Render free tier, not suitable for real production.
+- **Computed stats instead of counter caches** — `donations.sum(:amount)` and `donations.count` run per page load. Always correct, no invalidation logic. At scale, counter caches or materialized columns would be needed.
+- **Preset amounts hardcoded in the view** — the assignment calls for "a few preset options"; a separate model would be over-engineering. In production, these would be configurable per campaign.
+- **Vanilla JS instead of Stimulus** — tab switching and form interactions total ~20 lines. A framework isn't justified for this amount.
+- **Tabs with placeholder content** — only the "Story" tab has real content. "Recent Donations" and "About" show placeholders. Deliberate scope cut.
+- **No automated tests** — not in the assignment deliverables. With more time, would add model and controller tests.
 
-* Services (job queues, cache servers, search engines, etc.)
+## What I'd Do with More Time
 
-* Deployment instructions
+- **Campaign index page** — a homepage listing all campaigns, instead of a redirect to `/campaigns/1`.
+- **Fill in all tabs** — populate "Recent Donations" with actual data from the DB, and "About" with organization info.
+- **Inline field validation** — highlight invalid fields next to the input instead of listing errors at the top of the form.
+- **Better success feedback** — replace the flash notice with a styled confirmation (toast or modal).
 
-* ...
+## Payment Provider Integration Plan
+
+How I'd wire in a real payment provider (e.g. Stripe) and move a donation from `pending` to `paid`:
+
+1. **Synchronous payment** — after form submission, the server calls the provider's API (e.g. Stripe PaymentIntents). The user waits in the browser. On success: update status to `paid`, show confirmation. On failure: show the error, let the user retry.
+
+2. **Webhook safety net** — register a webhook endpoint with the provider. If the sync call succeeds but the server fails to persist the update (crash, timeout), the webhook catches it. Also prevents double-charging by checking if the donation is already `paid`.
+
+3. **Async email** — on status change to `paid`, enqueue a background job (Active Job + Solid Queue) to send a confirmation email with invoice. Email delivery does not block the user's request.

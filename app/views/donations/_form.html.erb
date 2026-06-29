@@ -81,7 +81,7 @@
 <% end %>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  (function() {
     var amountField = document.getElementById('donation_amount');
 
     document.querySelectorAll('.preset-amount').forEach(function(btn) {
@@ -98,13 +98,20 @@
       });
     });
 
-    document.getElementById('dedication-toggle').addEventListener('change', function() {
-      document.querySelector('.dedication-field').style.display = this.checked ? 'block' : 'none';
+    var dedicationToggle = document.getElementById('dedication-toggle');
+    var dedicationField = document.querySelector('.dedication-field');
+
+    dedicationToggle.addEventListener('change', function() {
+      dedicationField.style.display = this.checked ? 'block' : 'none';
     });
+
+    if (dedicationToggle.checked) {
+      dedicationField.style.display = 'block';
+    }
 
     var errors = document.querySelector('.form-errors');
     if (errors) {
       errors.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  });
+  })();
 </script>
