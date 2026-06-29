@@ -33,14 +33,15 @@ Visit [http://localhost:3000/campaigns/1](http://localhost:3000/campaigns/1).
 
 ## What I'd Do with More Time
 
-- **Campaign index page** — a homepage listing all campaigns, instead of a redirect to `/campaigns/1`.
-- **Fill in all tabs** — populate "Recent Donations" with actual data from the DB, and "About" with organization info.
-- **Inline field validation** — highlight invalid fields next to the input instead of listing errors at the top of the form.
-- **Better success feedback** — replace the flash notice with a styled confirmation (toast or modal).
+- **Automated Testing:** Write Model specs for validations/business logic and Request/Controller specs to fully cover the donation submission flow.
+- **Dynamic "Recent Donations" Tab:** Implement the backend queries to fetch and render actual live donation records from the database inside this tab, replacing the static placeholder text.
+- **Dynamic Routing & Slugs:** Eliminate the hardcoded `/campaigns/1` approach. I would map the application root dynamically to the active campaign or implement human-readable slugs (e.g., `/campaigns/the-orange-garden`).
+- **Database Consistency:** Transition from SQLite to PostgreSQL for proper concurrency support (row-level locking vs. file-level), production-grade reliability.
+- **Form UX Polish:** Add precise inline error messages next to form inputs instead of top-of-form summaries, and implement a cleaner success feedback state (like a modal or toast) post-submission.
 
 ## Payment Provider Integration Plan
 
-How I'd wire in a real payment provider (e.g. Stripe) and move a donation from `pending` to `paid`:
+How I'd wire in a real payment provider and move a donation from `pending` to `paid`:
 
 1. **Synchronous payment** — after form submission, the server calls the provider's API (e.g. Stripe PaymentIntents). The user waits in the browser. On success: update status to `paid`, show confirmation. On failure: show the error, let the user retry.
 
