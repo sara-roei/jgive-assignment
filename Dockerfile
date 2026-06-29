@@ -54,6 +54,9 @@ RUN bundle exec bootsnap precompile -j 1 app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
+# Prepare database with seed data baked into the image
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails db:prepare db:seed
+
 
 
 
@@ -70,4 +73,4 @@ COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --chown=rails:rails --from=build /rails /rails
 
 EXPOSE 80
-CMD ["bash", "-c", "mkdir -p storage && ./bin/rails db:prepare && ./bin/rails db:seed && exec ./bin/thrust ./bin/rails server"]
+CMD ["./bin/thrust", "./bin/rails", "server"]
