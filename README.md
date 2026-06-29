@@ -4,6 +4,9 @@ A Rails application reproducing the [Jgive campaign donation page](https://www.j
 
 Built with Rails 8.1, SQLite, and ERB views.
 
+**Live demo:** [https://jgive-assignment-1.onrender.com/campaigns/1](https://jgive-assignment-1.onrender.com/campaigns/1)
+**Source code:** [https://github.com/sara-roei/jgive-assignment](https://github.com/sara-roei/jgive-assignment)
+
 ## Running Locally
 
 Prerequisites: Ruby 3.2.2, Bundler, SQLite3.
@@ -44,3 +47,14 @@ How I'd wire in a real payment provider (e.g. Stripe) and move a donation from `
 2. **Webhook safety net** — register a webhook endpoint with the provider. If the sync call succeeds but the server fails to persist the update (crash, timeout), the webhook catches it. Also prevents double-charging by checking if the donation is already `paid`.
 
 3. **Async email** — on status change to `paid`, enqueue a background job (Active Job + Solid Queue) to send a confirmation email with invoice. Email delivery does not block the user's request.
+
+
+## Setup, Methodology, and AI Thoughts
+
+- **Tools:** Built using **Cursor** (v3.2.16) as the primary IDE with **Claude 3 Opus** providing context-aware completions and conversational assistance.
+- **Development Process & AI Steering:** As a developer coming from a Node/React background, I initially brainstormed architectural choices with the AI (e.g., assessing the time overhead of setting up an API/React frontend vs. utilizing native Rails views). I proactively restricted the assistant from generating raw code until a solid, minimal implementation plan was established.
+- **Where AI Helped:** Highly effective for rapidly scaffolding the core database models, generating realistic initial seed data in Hebrew, and handling the core form parameters routing. 
+- **Where AI Got in the Way:** The assistant repeatedly attempted to introduce premature optimizations and over-engineering — such as proposing extra models for donation presets, adding cache columns, or outputting heavy Stimulus setups. I deliberately steered it away from these, stripping the final solution down to clean, lightweight Rails conventions and standard vanilla JS inline behaviors to fit the strict 4-6 hour window. 
+Deployment was another friction point... the AI struggled with Render's Docker execution model, cycling through several failed approaches (modifying entrypoints, CMD overrides, build-time seeding). The fix was simple: I removed the Dockerfile so Render auto-detected the app as Ruby and handled the build natively.
+
+The full, unedited chat history can be viewed in the [`cursor_ruby_on_rails_home_assignment.md`](/cursor_ruby_on_rails_home_assignment.md) file in this repository.
